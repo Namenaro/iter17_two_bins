@@ -25,7 +25,7 @@ def exp0(logger):
     h_u_rad = 0
 
     A_event_diam = 50
-    step = 10
+    step = 100
     B_event_diam_grid = range(0, 700, step)
 
     etalon_pic = etalons_of3()[0]  # эталон
