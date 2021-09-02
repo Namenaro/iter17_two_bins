@@ -49,7 +49,7 @@ def sample_from_hist(probs, bins, sample_size):
 def count_error_btw_two_samples(ground_true, prediction):
     res = 0
     for i in range(len(ground_true)):
-        res+=(ground_true[i].value - prediction[i])**2
+        res+=(ground_true[i] - prediction[i])**2
     return res/len(ground_true)
 
 def plot_points_on_pic_first_red(pic, X,Y, colors=None):
