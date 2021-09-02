@@ -49,14 +49,28 @@ def exp0(logger):
     pics_test = get_numbers_of_type(3)[trainset_len + 1:n - 1]
     sample_size_train = 80
     sample_size_test = 250
+    nbins = 20
 
     for B_diam in B_event_diam_grid:
         B = BinaryUnit(B_u_rad, B_sens_rad, B_etalon, B_diam, dx=X[1] - X[0], dy=Y[1] - Y[0])
         AB = Chain(A, B)
-        reality = make_sample_of_appliable(appliable=ha, sample_size=sample_size_test, pics=pics_test,
+        reality_test_sample = make_sample_of_appliable(appliable=ha, sample_size=sample_size_test, pics=pics_test,
                                            condition=AB.apply2)
 
+        A_err = eval_error_of_prediction(reality_test_sample, pics_train,sample_size_train,A,ha, nbins )
+        hA_err.append(A_err)
 
+        B_err = eval_error_of_prediction(reality_test_sample, pics_train,sample_size_train,B,hb, nbins )
+        hB_err.append(B_err)
+
+        AB_err = eval_error_of_prediction(reality_test_sample, pics_train,sample_size_train,AB,ha, nbins )
+        hAB_err.append(AB_err)
+
+    h_err = eval_error_of_prediction(reality_test_sample, pics_train, sample_size_train,None, ha, nbins )
+    draw(hA_err, hB_err, B_err, logger, h_err)
+
+def draw(hA_err, hB_err, B_err, logger, h_err):
+    pass
 
 if __name__ == "__main__":
     logger = HtmlLogger("exp0-vary event diam")
