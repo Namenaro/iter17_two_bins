@@ -1,6 +1,6 @@
 """
-Щелкаем по эталонной тройке в 2 местах.
-В первом будем делать бин, а во втором характеристику.
+Щелкаем по эталонной тройке в 3 местах.
+0)A, 1)B, 2)h
 
 """
 from data import *
@@ -13,6 +13,7 @@ from utils import *
 from binary import *
 from nonbinary import *
 
+import matplotlib.pyplot as plt
 
 def exp0(logger):
     A_sens_rad = 0
@@ -67,10 +68,16 @@ def exp0(logger):
         hAB_err.append(AB_err)
 
     h_err = eval_error_of_prediction(reality_test_sample, pics_train, sample_size_train,None, ha, nbins )
-    draw(hA_err, hB_err, B_err, logger, h_err)
+    draw(hA_err, hB_err, hAB_err, logger, h_err)
 
-def draw(hA_err, hB_err, B_err, logger, h_err):
-    pass
+def draw(hA_err, hB_err, hAB_err, logger, h_err):
+    fig, ax = plt.subplots()
+    ax.plot(hA_err, marker='o', markerfacecolor='blue', markersize=12, color='#00bfff', linewidth=4, label='by A')
+    ax.plot(hB_err, marker='o', markerfacecolor='blue', markersize=12, color='#0080ff', linewidth=4, label='by B')
+    ax.plot(hAB_err, marker='o', markerfacecolor='blue', markersize=12, color='#40ff00', linewidth=4, label='by AB')
+    plt.axhline(y=h_err, color='black', linestyle='-', label='no binaries')
+    ax.legend()
+    logger.add_fig(fig)
 
 if __name__ == "__main__":
     logger = HtmlLogger("exp0-vary event diam")
