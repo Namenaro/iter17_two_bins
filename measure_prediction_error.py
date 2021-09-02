@@ -10,7 +10,11 @@ class Predictor:
     def __init__(self,A,ha, sample_size_train, pics_train, nbins):
         self.A = A
         self.ha = ha
-        train_sample = make_sample_of_appliable(ha,sample_size_train,pics_train,A)
+        if A is None:
+            condition = None
+        else:
+            condition = A.apply2
+        train_sample = make_sample_of_appliable(ha,sample_size_train,pics_train,condition)
         self.probs, self.bins = get_hist(train_sample, nbins)
 
     def predict(self, test_sample_size):

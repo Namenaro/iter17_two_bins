@@ -24,8 +24,8 @@ def exp0(logger):
     B_u_rad = 0
     h_u_rad = 0
 
-    A_event_diam = 50
-    step = 100
+    A_event_diam = 80
+    step = 20
     B_event_diam_grid = range(0, 700, step)
 
     etalon_pic = etalons_of3()[0]  # эталон
@@ -37,7 +37,7 @@ def exp0(logger):
 
     A = BinaryUnit(A_u_rad, A_sens_rad, A_etalon, A_event_diam, dx=0, dy=0)
     ha = NonBinaryUnit(h_u_rad, h_sens_rad, h_etalon, dx=X[2] - X[0], dy=Y[2] - Y[0])
-    hb = NonBinaryUnit(h_u_rad, h_sens_rad, h_etalon, dx=X[1] - X[0], dy=Y[1] - Y[0])
+    hb = NonBinaryUnit(h_u_rad, h_sens_rad, h_etalon, dx=X[2] - X[1], dy=Y[2] - Y[1])
 
     hA_err = []
     hB_err = []
@@ -48,9 +48,15 @@ def exp0(logger):
     trainset_len = int(n / 2)
     pics_train = get_numbers_of_type(3)[0:trainset_len]
     pics_test = get_numbers_of_type(3)[trainset_len + 1:n - 1]
-    sample_size_train = 80
-    sample_size_test = 250
-    nbins = 20
+    sample_size_train = 50
+    sample_size_test = 150
+    nbins = 10
+
+    logger.add_text("A:")
+    logger.add_text(str(vars(A)))
+    logger.add_text("ha:")
+    logger.add_text(str(vars(ha)))
+    logger.add_text(str(vars(BinaryUnit(B_u_rad, B_sens_rad, B_etalon,0, dx=X[1] - X[0], dy=Y[1] - Y[0]))))
 
     for B_diam in B_event_diam_grid:
         B = BinaryUnit(B_u_rad, B_sens_rad, B_etalon, B_diam, dx=X[1] - X[0], dy=Y[1] - Y[0])
@@ -68,18 +74,19 @@ def exp0(logger):
         hAB_err.append(AB_err)
 
     h_err = eval_error_of_prediction(reality_test_sample, pics_train, sample_size_train,None, ha, nbins )
+    logger.add_fig(plot_points_on_pic_first_red(etalon_pic, X, Y))
     draw(hA_err, hB_err, hAB_err, logger, h_err)
 
 def draw(hA_err, hB_err, hAB_err, logger, h_err):
     fig, ax = plt.subplots()
-    ax.plot(hA_err, marker='o', markerfacecolor='blue', markersize=12, color='#00bfff', linewidth=4, label='by A')
-    ax.plot(hB_err, marker='o', markerfacecolor='blue', markersize=12, color='#0080ff', linewidth=4, label='by B')
-    ax.plot(hAB_err, marker='o', markerfacecolor='blue', markersize=12, color='#40ff00', linewidth=4, label='by AB')
+    ax.plot(hA_err,  markerfacecolor='blue', markersize=12, color='#00bfff', linewidth=4, label='by A')
+    ax.plot(hB_err,  markerfacecolor='blue', markersize=12, color='#0080ff', linewidth=4, label='by B')
+    ax.plot(hAB_err, markerfacecolor='blue', markersize=12, color='#40ff00', linewidth=4, label='by AB')
     plt.axhline(y=h_err, color='black', linestyle='-', label='no binaries')
     ax.legend()
     logger.add_fig(fig)
 
 if __name__ == "__main__":
-    logger = HtmlLogger("exp0-vary event diam")
+    logger = HtmlLogger("17exp0-vary event diam")
     exp0(logger=logger)
     logger.close()

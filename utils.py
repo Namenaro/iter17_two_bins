@@ -59,6 +59,7 @@ def plot_points_on_pic_first_red(pic, X,Y, colors=None):
     plt.imshow(pic, cmap='gray_r')
     plt.scatter(X[0], Y[0], s=100, c='red', marker='o', alpha=0.4)
     plt.scatter(X[1:], Y[1:], s=100, c=colors, marker='o', alpha=0.4)
+    plt.plot(X,Y)
     return fig
 
 def plot_graph(X, Y):
