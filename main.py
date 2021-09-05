@@ -15,22 +15,19 @@ from nonbinary import *
 
 import matplotlib.pyplot as plt
 
-def exp0(logger):
+def exp0(etalon_pic, X, Y,logger, B_u_rad, h_u_rad):
     A_sens_rad = 0
     B_sens_rad = 0
     h_sens_rad = 0
 
     A_u_rad = 0
-    B_u_rad = 0
-    h_u_rad = 0
+
 
     A_event_diam = 80
     step = 20
     B_event_diam_grid = range(0, 700, step)
 
-    etalon_pic = etalons_of3()[0]  # эталон
 
-    X, Y = select_coord_on_pic(etalon_pic)  # click - 0)A, 1)B, 2)h
     A_etalon = make_measurement(etalon_pic, X[0], Y[0], A_sens_rad)
     h_etalon = make_measurement(etalon_pic, X[2], Y[2], h_sens_rad)
     B_etalon = make_measurement(etalon_pic, X[1], Y[1], B_sens_rad)
@@ -88,5 +85,17 @@ def draw(hA_err, hB_err, hAB_err, logger, h_err):
 
 if __name__ == "__main__":
     logger = HtmlLogger("17exp0-vary event diam")
-    exp0(logger=logger)
+    etalon_pic = etalons_of3()[0]  # эталон
+    X, Y = select_coord_on_pic(etalon_pic)  # click - 0)A, 1)B, 2)h
+    B_u_rad = 0
+    h_u_rad = 0
+    exp0(etalon_pic, X, Y, logger, B_u_rad, h_u_rad)
+
+    B_u_rad = 0
+    h_u_rad = 1
+    exp0(etalon_pic, X, Y, logger, B_u_rad, h_u_rad)
+
+    B_u_rad = 1
+    h_u_rad = 1
+    exp0(etalon_pic, X, Y, logger, B_u_rad, h_u_rad)
     logger.close()
