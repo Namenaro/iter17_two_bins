@@ -72,13 +72,13 @@ def exp0(etalon_pic, X, Y,logger, B_u_rad, h_u_rad):
 
     h_err = eval_error_of_prediction(reality_test_sample, pics_train, sample_size_train,None, ha, nbins )
     logger.add_fig(plot_points_on_pic_first_red(etalon_pic, X, Y))
-    draw(hA_err, hB_err, hAB_err, logger, h_err)
+    draw(B_event_diam_grid,  hA_err, hB_err, hAB_err, logger, h_err)
 
-def draw(hA_err, hB_err, hAB_err, logger, h_err):
+def draw(grid, hA_err, hB_err, hAB_err, logger, h_err):
     fig, ax = plt.subplots()
-    ax.plot(hA_err,  markerfacecolor='blue', markersize=12, color='#00bfff', linewidth=4, label='by A')
-    ax.plot(hB_err,  markerfacecolor='blue', markersize=12, color='#0080ff', linewidth=4, label='by B')
-    ax.plot(hAB_err, markerfacecolor='blue', markersize=12, color='#40ff00', linewidth=4, label='by AB')
+    ax.plot(grid, hA_err,  markerfacecolor='blue', markersize=12, color='#00bfff', linewidth=4, label='by A')
+    ax.plot(grid,hB_err,  markerfacecolor='blue', markersize=12, color='#0080ff', linewidth=4, label='by B')
+    ax.plot(grid,hAB_err, markerfacecolor='blue', markersize=12, color='#40ff00', linewidth=4, label='by AB')
     plt.axhline(y=h_err, color='black', linestyle='-', label='no binaries')
     ax.legend()
     logger.add_fig(fig)
@@ -95,7 +95,5 @@ if __name__ == "__main__":
     h_u_rad = 1
     exp0(etalon_pic, X, Y, logger, B_u_rad, h_u_rad)
 
-    B_u_rad = 1
-    h_u_rad = 1
-    exp0(etalon_pic, X, Y, logger, B_u_rad, h_u_rad)
+
     logger.close()
